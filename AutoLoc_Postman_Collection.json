@@ -1,0 +1,326 @@
+{
+  "info": {
+    "name": "AutoLoc API — Etude de Cas ASI",
+    "description": "Collection Postman complète pour tester toutes les fonctionnalités d'AutoLoc (Agences, Flotte/Véhicules, Clients, Réservations, Contrats/Paiements, Affectations, Scheduler & Statistiques).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Agences, Employés, Équipements & Maintenances",
+      "item": [
+        {
+          "name": "Lister toutes les agences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/agences"
+          }
+        },
+        {
+          "name": "Créer une agence",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"AutoLoc Hammamet\",\n  \"ville\": \"Hammamet\",\n  \"adresse\": \"Avenue des Nations Unies\",\n  \"telephone\": \"+216 72 300 400\"\n}"
+            },
+            "url": "{{baseUrl}}/api/agences"
+          }
+        },
+        {
+          "name": "Créer un employé (MANAGER requis)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-AutoLoc-Role", "value": "MANAGER" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Bouazizi\",\n  \"prenom\": \"Walid\",\n  \"role\": \"AGENT\"\n}"
+            },
+            "url": "{{baseUrl}}/api/agences/employes"
+          }
+        },
+        {
+          "name": "Affecter un employé à une agence",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-AutoLoc-Role", "value": "MANAGER" }
+            ],
+            "url": "{{baseUrl}}/api/agences/3/employes/4"
+          }
+        },
+        {
+          "name": "Lister tous les équipements optionnels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/agences/equipements"
+          }
+        },
+        {
+          "name": "Planifier une maintenance sur un véhicule",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculeId\": 5,\n  \"dateDebut\": \"2026-10-01\",\n  \"dateFin\": \"2026-10-03\",\n  \"description\": \"Vidange et contrôle technique\"\n}"
+            },
+            "url": "{{baseUrl}}/api/agences/maintenances"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Véhicules & Flotte",
+      "item": [
+        {
+          "name": "Lister tous les véhicules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/vehicules"
+          }
+        },
+        {
+          "name": "Lister les véhicules (Pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/vehicules/page?page=0&size=5"
+          }
+        },
+        {
+          "name": "Rechercher les véhicules disponibles (Ville, Catégorie, Période)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/vehicules/disponibles?ville=Tunis&categorie=CITADINE&dateDebut=2026-10-15&dateFin=2026-10-20"
+          }
+        },
+        {
+          "name": "Filtrer les véhicules (Criteria API / Specifications)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/vehicules/filtrer?ville=Tunis&statut=DISPONIBLE&maxTarif=150"
+          }
+        },
+        {
+          "name": "Créer un nouveau véhicule",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"immatriculation\": \"230-TN-5005\",\n  \"marque\": \"Hyundai\",\n  \"modele\": \"Tucson\",\n  \"categorie\": \"SUV\",\n  \"tarifJournalier\": 175.00,\n  \"statut\": \"DISPONIBLE\",\n  \"agenceId\": 3\n}"
+            },
+            "url": "{{baseUrl}}/api/vehicules"
+          }
+        },
+        {
+          "name": "Affecter un véhicule à une agence",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "url": "{{baseUrl}}/api/vehicules/5/affecter-agence/3"
+          }
+        },
+        {
+          "name": "Affecter un équipement à un véhicule",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "url": "{{baseUrl}}/api/vehicules/5/affecter-equipement/5"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Clients",
+      "item": [
+        {
+          "name": "Lister tous les clients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/clients"
+          }
+        },
+        {
+          "name": "Inscrire un nouveau client",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dridi\",\n  \"prenom\": \"Salma\",\n  \"email\": \"salma.dridi@example.com\",\n  \"telephone\": \"+216 98 765 432\",\n  \"numPermis\": \"PERM-TN-555666\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clients"
+          }
+        },
+        {
+          "name": "Historique des réservations d'un client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/clients/3/reservations"
+          }
+        },
+        {
+          "name": "Historique des contrats d'un client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/clients/3/contrats"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Réservations",
+      "item": [
+        {
+          "name": "Lister toutes les réservations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/reservations"
+          }
+        },
+        {
+          "name": "Créer une réservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": 3,\n  \"vehiculeId\": 5,\n  \"dateDebut\": \"2026-10-15\",\n  \"dateFin\": \"2026-10-18\"\n}"
+            },
+            "url": "{{baseUrl}}/api/reservations"
+          }
+        },
+        {
+          "name": "Valider une réservation (Génère le Contrat automatiquement)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "url": "{{baseUrl}}/api/reservations/4/valider"
+          }
+        },
+        {
+          "name": "Annuler une réservation",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "{{baseUrl}}/api/reservations/4/annuler"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Contrats & Paiements",
+      "item": [
+        {
+          "name": "Lister tous les contrats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/contrats"
+          }
+        },
+        {
+          "name": "Enregistrer un paiement sur un contrat",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-AutoLoc-Role", "value": "AGENT" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 250.00,\n  \"modePaiement\": \"CARTE\"\n}"
+            },
+            "url": "{{baseUrl}}/api/contrats/2/paiements"
+          }
+        },
+        {
+          "name": "Lister les paiements d'un contrat",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/contrats/2/paiements"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Statistiques & Tâches Planifiées (Scheduler)",
+      "item": [
+        {
+          "name": "Statistiques globales AutoLoc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/statistiques/globales"
+          }
+        },
+        {
+          "name": "Statistiques d'une agence (MANAGER)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-AutoLoc-Role", "value": "MANAGER" }
+            ],
+            "url": "{{baseUrl}}/api/statistiques/agences/3"
+          }
+        },
+        {
+          "name": "Déclencher libération automatique des véhicules (Scheduler)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/statistiques/scheduler/liberer-vehicules"
+          }
+        },
+        {
+          "name": "Déclencher alertes d'échéance des contrats (Scheduler)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/statistiques/scheduler/alertes-echeance"
+          }
+        }
+      ]
+    }
+  ]
+}
