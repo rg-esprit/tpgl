@@ -187,6 +187,11 @@ class TpglApplicationTests {
 		BigDecimal tarifStandard = tarificationService.calculerTarifAvecStrategie(
 				v, LocalDate.of(2026, 10, 1), LocalDate.of(2026, 10, 3), "STANDARD");
 		assertThat(tarifStandard).isEqualByComparingTo(new BigDecimal("200.00"));
+
+		// Location entreprise (2 jours : 2 * 100 = 200 - 15% = 170.00)
+		BigDecimal tarifEntreprise = tarificationService.calculerTarifAvecStrategie(
+				v, LocalDate.of(2026, 10, 1), LocalDate.of(2026, 10, 3), "ENTREPRISE");
+		assertThat(tarifEntreprise).isEqualByComparingTo(new BigDecimal("170.00"));
 	}
 
 	@Test
