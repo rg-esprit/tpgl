@@ -1,0 +1,69 @@
+@baseUrl = http://localhost:8080
+
+### 1. Agences
+# Lister toutes les agences
+GET {{baseUrl}}/api/agences
+Accept: application/json
+
+### Créer une agence
+POST {{baseUrl}}/api/agences
+Content-Type: application/json
+
+{
+  "nom": "AutoLoc Hammamet",
+  "ville": "Hammamet",
+  "adresse": "Avenue des Nations Unies",
+  "telephone": "+216 72 300 400"
+}
+
+### Créer un employé (Role MANAGER requis)
+POST {{baseUrl}}/api/agences/employes
+Content-Type: application/json
+X-AutoLoc-Role: MANAGER
+
+{
+  "nom": "Bouazizi",
+  "prenom": "Walid",
+  "role": "AGENT"
+}
+
+### Affecter un employé à une agence
+PUT {{baseUrl}}/api/agences/3/employes/4
+X-AutoLoc-Role: MANAGER
+
+### 2. Véhicules & Flotte
+# Lister tous les véhicules
+GET {{baseUrl}}/api/vehicules
+Accept: application/json
+
+### Créer un nouveau véhicule
+POST {{baseUrl}}/api/vehicules
+Content-Type: application/json
+X-AutoLoc-Role: AGENT
+
+{
+  "immatriculation": "230-TN-5005",
+  "marque": "Hyundai",
+  "modele": "Tucson",
+  "categorie": "SUV",
+  "tarifJournalier": 175.00,
+  "statut": "DISPONIBLE",
+  "agenceId": 1
+}
+
+### 3. Clients
+# Lister tous les clients
+GET {{baseUrl}}/api/clients
+Accept: application/json
+
+### Créer un client
+POST {{baseUrl}}/api/clients
+Content-Type: application/json
+
+{
+  "nom": "Trabelsi",
+  "prenom": "Sami",
+  "email": "sami.trabelsi@example.com",
+  "telephone": "+216 98 123 456",
+  "numeroPermis": "TN-PERMIS-987654"
+}

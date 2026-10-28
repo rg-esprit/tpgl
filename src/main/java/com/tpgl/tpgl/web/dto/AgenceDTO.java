@@ -24,7 +24,7 @@ public class AgenceDTO {
 
     private String telephone;
 
-    private int nombreVehicules;
+    private Integer nombreVehicules;
 
-    private int nombreEmployes;
+    private Integer nombreEmployes;
 }
